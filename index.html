@@ -6,7 +6,7 @@
 <title>Gamer Launcher</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100dvh;overflow:hidden;background:#02070f;color:#fff;position:fixed;inset:0}
+html,body{--cx:16%;width:100%;height:100dvh;overflow:hidden;background:#02070f;color:#fff;position:fixed;inset:0}
 .bg{position:fixed;inset:0;z-index:-4;background:radial-gradient(ellipse at 28% 18%, #1d2e68 0%, #101a3a 38%, #060a18 72%)}
 .stars{position:fixed;inset:0;z-index:-3} .star{position:absolute;background:#fff;border-radius:50%}
 .moon{position:fixed;top:10%;right:16%;width:78px;height:78px;z-index:-2;background:radial-gradient(circle at 32% 32%, #fffef5 0%, #ece8d0 42%, #c9c5ad 75%);border-radius:50%;box-shadow:0 0 28px rgba(255,250,220,.5)}
@@ -16,17 +16,17 @@ html,body{width:100%;height:100dvh;overflow:hidden;background:#02070f;color:#fff
 .tab{padding:9px 10px;border-radius:10px;cursor:pointer;color:#7e90b3;font-weight:800;display:flex;gap:8px;align-items:center;border:1px solid transparent;margin-bottom:4px;font-size:12px}
 .tab.active{color:#fff;background:rgba(138,240,255,.14);border-color:rgba(138,230,255,.26)}
 .main{flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden}
-.title-small{flex-shrink:0;text-align:center;padding-top:10px;font-size:22px;font-weight:950;letter-spacing:.5px;line-height:1}
+.title-small{flex-shrink:0;text-align:left;padding:10px 0 0 14px;font-size:22px;font-weight:950;letter-spacing:.5px;line-height:1}
 .title-small s{background:linear-gradient(90deg,#8affff,#8aff8a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-.stage{flex:1;position:relative;margin-bottom:60px;perspective:900px;perspective-origin:50% 40%;overflow:hidden}
-.rot{position:absolute;left:50%;top:44%;width:0;height:0;transform-style:preserve-3d}
+.stage{flex:1;position:relative;margin-bottom:60px;perspective:900px;perspective-origin:var(--cx) 40%;overflow:hidden}
+.rot{position:absolute;left:var(--cx);top:44%;width:0;height:0;transform-style:preserve-3d}
 .part{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d}
 .box{position:absolute;left:0;top:0;transform-style:preserve-3d}
 .face{position:absolute;left:50%;top:50%;backface-visibility:hidden;-webkit-backface-visibility:hidden;image-rendering:pixelated}
-.shadow{position:absolute;left:50%;bottom:30px;width:130px;height:10px;margin-left:-65px;background:radial-gradient(ellipse, rgba(0,0,0,.6) 0%, transparent 70%);border-radius:50%}
-.sname{position:absolute;left:0;right:0;bottom:3px;text-align:center;line-height:1.2}
+.shadow{position:absolute;left:var(--cx);bottom:30px;width:130px;height:10px;margin-left:-65px;background:radial-gradient(ellipse, rgba(0,0,0,.6) 0%, transparent 70%);border-radius:50%}
+.sname{position:absolute;left:var(--cx);transform:translateX(-50%);white-space:nowrap;bottom:3px;text-align:center;line-height:1.2}
 .sname b{display:block;font-size:12px;color:#fff}.sname span{font-size:9px;color:#8aa0c8}
-.status{position:absolute;left:0;right:0;top:50%;text-align:center;font-size:12px;color:#8affff;font-weight:800;pointer-events:none;transition:opacity .4s}
+.status{position:absolute;left:var(--cx);transform:translateX(-50%);white-space:nowrap;top:50%;text-align:center;font-size:12px;color:#8affff;font-weight:800;pointer-events:none;transition:opacity .4s}
 .bottom-bar{position:absolute;left:0;right:0;bottom:0;height:60px;padding:8px 14px;background:rgba(8,14,32,.92);backdrop-filter:blur(18px);border-top:1px solid rgba(130,190,255,.18);display:flex;justify-content:space-between;align-items:center;z-index:30}
 .ver-text{font-size:10px;color:#8aa0c8;line-height:1.2} .ver-text b{color:#ff6b6b}
 .btns{display:flex;gap:8px}
@@ -48,6 +48,22 @@ html,body{width:100%;height:100dvh;overflow:hidden;background:#02070f;color:#fff
 .search{display:flex;gap:6px;margin-bottom:10px}
 .search input{flex:1;background:#0a1020;color:#fff;border:1px solid #334;border-radius:9px;padding:8px 10px;font-size:12px;outline:none}
 .about p{font-size:11px;line-height:1.5;color:#b8c6e6;margin-top:8px}
+.imp{position:absolute;top:10px;right:12px;z-index:6;padding:8px 12px}
+.btn.sm{padding:6px 10px;font-size:10px}
+.modal{position:absolute;inset:0;z-index:60;background:rgba(2,7,15,.86);display:flex;align-items:center;justify-content:center;padding:12px}
+.mbox{width:min(560px,100%);max-height:100%;background:#0d1328;border:1px solid rgba(130,190,255,.25);border-radius:16px;padding:14px;display:flex;flex-direction:column}
+.mlist{overflow:auto;flex:1;margin-top:8px}
+.arow{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;cursor:pointer}
+.arow:active{background:rgba(138,255,255,.12)}
+.arow img,.arow .ph{width:36px;height:36px;border-radius:8px;flex-shrink:0;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center}
+.arow .an{font-size:12px;font-weight:800}.arow .ap{font-size:9px;color:#8aa0c8}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0}
+.chip{padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);font-size:11px;white-space:nowrap;cursor:pointer}
+.chip.on{background:rgba(138,255,255,.2);border-color:#8affff}
+.vrow{display:flex;justify-content:space-between;align-items:center;padding:7px 4px;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px;gap:6px}
+.vrow small{color:#8aa0c8;font-size:9px;display:block}
+.vh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:8px}
+.vcard{text-align:left;margin-bottom:10px}
 @media (orientation:portrait){.app{transform:rotate(90deg);transform-origin:left top;width:100dvh;height:100vw;position:absolute;top:0;left:100vw}}
 </style>
 </head>
@@ -64,6 +80,7 @@ html,body{width:100%;height:100dvh;overflow:hidden;background:#02070f;color:#fff
 
 <div class="main" id="homeM">
 <div class="title-small">GAMER <s>LAUNCHER</s></div>
+<button class="btn btn-glass imp" onclick="clickS();importGame()">📥 Импорт игры</button>
 <div class="stage" id="stage">
 <div class="shadow"></div>
 <div class="rot" id="rot"></div>
@@ -81,10 +98,23 @@ html,body{width:100%;height:100dvh;overflow:hidden;background:#02070f;color:#fff
 
 <div class="panel" id="modsP"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><b style="font-size:13px">Моды — ModBay</b><button class="btn btn-glass" style="padding:5px 10px;font-size:11px" onclick="clickS();loadMods(true)">↻</button></div><div class="grid" id="modsList"></div></div>
 <div class="panel" id="skinsP">
+<div style="margin-bottom:10px"><button class="btn btn-glass" style="width:100%" onclick="clickS();document.getElementById('skinFile').click()">📁 Импортировать свой скин (PNG)</button><input type="file" id="skinFile" accept="image/png,image/*" style="display:none"></div>
 <div class="search"><input id="skinQ" placeholder="Ник игрока (любой скин)" autocomplete="off"><button class="btn btn-play" style="padding:8px 12px" onclick="clickS();addSkin()">Найти</button></div>
 <div class="grid" id="skinsList"></div>
 </div>
-<div class="panel" id="versP"><div class="card" style="text-align:left"><b>Выбери версию</b><div id="verGrid" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div></div></div>
+<div class="panel" id="versP">
+<div class="card vcard">
+<div class="vh"><b>🎮 Мои игры</b><button class="btn btn-play sm" onclick="clickS();importGame()">＋ Импорт</button></div>
+<div id="gamesList"></div>
+</div>
+<div class="card vcard">
+<b>📦 Версии Bedrock</b>
+<div class="chips" id="serChips"></div>
+<input class="inp" id="verQ" placeholder="Поиск версии…" style="width:100%;max-width:none;margin-bottom:6px" oninput="renderVerList()">
+<div id="verList"></div>
+<div class="vrow"><input class="inp" id="cvIn" placeholder="Своя версия, напр. 1.21.131" style="flex:1;max-width:none"><button class="btn btn-glass sm" onclick="clickS();addCustomVer()">Добавить</button></div>
+</div>
+</div>
 
 <div class="panel" id="settingsP">
 <div class="settings-card">
@@ -162,20 +192,151 @@ if(screen.orientation && screen.orientation.lock){screen.orientation.lock('lands
 let sb=document.getElementById('stars');
 for(let i=0;i<60;i++){let d=document.createElement('div');d.className='star';d.style.left=Math.random()*100+'%';d.style.top=Math.random()*50+'%';let z=Math.random()*1.8+0.4;d.style.width=z+'px';d.style.height=z+'px';d.style.opacity=Math.random()*0.7+0.3;sb.appendChild(d);}
 
-// ---------- версии ----------
-let selectedVer=LS('gamer_ver',null);
+// ---------- версии, игры, привязка ----------
 let currentSkinName=LS('gamer_skin','Steve');
-const vers=['1.21.90','1.21.80','1.21.70','1.21.60','1.20.81'];
-function updateVer(){let el=document.getElementById('verText');if(selectedVer){el.innerHTML=`выбрана версия<br><b style="color:#8aff8a">${selectedVer}</b>`;}else{el.innerHTML=`версия еще не выбрана<br><b style="color:#ff6b6b">—</b>`;}}
-function renderVers(){let g=document.getElementById('verGrid');g.innerHTML='';vers.forEach(v=>{let b=document.createElement('button');b.textContent=v;b.style.cssText='padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:11px;cursor:pointer'+(selectedVer===v?';background:rgba(138,255,255,.2);border-color:#8affff':'');b.onclick=()=>{clickS();selectedVer=v;LSset('gamer_ver',v);updateVer();renderVers();sw('home',document.querySelector('.tab'));};g.appendChild(b);});}
-function play(){if(!selectedVer){toast('Выбери версию!');sw('vers');return;} alert('Запуск '+selectedVer+' / '+nick+' / '+currentSkinName);}
+const jp=(k,d)=>{try{return JSON.parse(LS(k,d));}catch(e){return JSON.parse(d);}};
+let games=jp('gamer_games','[]'),binds=jp('gamer_binds','{}'),sel=jp('gamer_sel','null'),customVers=jp('gamer_cvers','[]');
+if(!sel){const ov=LS('gamer_ver',null);if(ov)sel={k:'ver',v:ov};}
+function sv(){LSset('gamer_games',JSON.stringify(games));LSset('gamer_binds',JSON.stringify(binds));LSset('gamer_sel',JSON.stringify(sel));LSset('gamer_cvers',JSON.stringify(customVers));}
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const VER_SERIES=[
+ ['26.x',['26.52','26.51','26.50','26.45','26.44','26.41','26.40','26.35','26.34','26.33','26.32','26.31','26.30','26.23','26.22','26.21','26.20','26.13','26.12','26.11','26.10','26.3','26.2','26.1','26.0']],
+ ['1.21',['1.21.130','1.21.124','1.21.123','1.21.122','1.21.121','1.21.120','1.21.114','1.21.113','1.21.112','1.21.111','1.21.102','1.21.101','1.21.100','1.21.94','1.21.93','1.21.92','1.21.91','1.21.90','1.21.81','1.21.80','1.21.73','1.21.72','1.21.71','1.21.70','1.21.62','1.21.61','1.21.60','1.21.51','1.21.50','1.21.44','1.21.43','1.21.42','1.21.41','1.21.40','1.21.31','1.21.30','1.21.24','1.21.23','1.21.22','1.21.21','1.21.20','1.21.3','1.21.2','1.21.1','1.21.0']],
+ ['1.20',['1.20.81','1.20.80','1.20.73','1.20.72','1.20.71','1.20.70','1.20.62','1.20.61','1.20.60','1.20.51','1.20.50','1.20.41','1.20.40','1.20.32','1.20.31','1.20.30','1.20.15','1.20.12','1.20.10','1.20.1','1.20.0']],
+ ['1.19',['1.19.83','1.19.81','1.19.80','1.19.73','1.19.72','1.19.71','1.19.70','1.19.63','1.19.62','1.19.61','1.19.60','1.19.51','1.19.50','1.19.41','1.19.40','1.19.31','1.19.30','1.19.22','1.19.21','1.19.20','1.19.12','1.19.11','1.19.10','1.19.2','1.19.1','1.19.0']],
+ ['1.18',['1.18.33','1.18.32','1.18.31','1.18.30','1.18.12','1.18.11','1.18.10','1.18.2','1.18.1','1.18.0']],
+ ['1.17',['1.17.41','1.17.40','1.17.34','1.17.32','1.17.30','1.17.11','1.17.10','1.17.2','1.17.1','1.17.0']],
+ ['1.16',['1.16.221','1.16.220','1.16.210','1.16.201','1.16.200','1.16.101','1.16.100','1.16.40','1.16.21','1.16.20','1.16.10','1.16.1','1.16.0']],
+ ['1.14',['1.14.60','1.14.41','1.14.30','1.14.20','1.14.2','1.14.1','1.14.0']],
+ ['1.13',['1.13.3','1.13.2','1.13.1','1.13.0']],
+ ['1.12',['1.12.1','1.12.0']],
+ ['1.11',['1.11.4','1.11.3','1.11.2','1.11.1','1.11.0']],
+ ['1.10',['1.10.1','1.10.0']],
+ ['1.9',['1.9.0']],
+ ['1.8',['1.8.1','1.8.0']],
+ ['1.7',['1.7.0']],
+ ['1.6',['1.6.1','1.6.0']],
+ ['1.5',['1.5.3','1.5.2','1.5.1','1.5.0']],
+ ['1.4',['1.4.1','1.4.0']],
+ ['1.2',['1.2.16','1.2.15','1.2.14','1.2.13','1.2.12','1.2.10','1.2.9','1.2.8','1.2.7','1.2.6','1.2.5','1.2.0']]
+];
+let curSeries='26.x';
+const gName=pkg=>{const g=games.find(x=>x.pkg===pkg);return g?g.name:pkg;};
+function updateVer(){
+ const el=document.getElementById('verText');
+ if(sel&&sel.k==='game')el.innerHTML='выбрана игра<br><b style="color:#8aff8a">'+esc(gName(sel.pkg))+'</b>';
+ else if(sel&&sel.k==='ver'){const b=binds[sel.v];el.innerHTML='выбрана версия<br><b style="color:#8aff8a">'+esc(sel.v)+(b?' → '+esc(gName(b)):'')+'</b>';}
+ else el.innerHTML='версия еще не выбрана<br><b style="color:#ff6b6b">—</b>';
+}
+function allSeries(){return customVers.length?[['Свои',customVers]].concat(VER_SERIES):VER_SERIES;}
+function renderVers(){renderGames();renderChips();renderVerList();}
+function renderChips(){
+ const c=document.getElementById('serChips');c.innerHTML='';
+ allSeries().forEach(x=>{const d=document.createElement('div');d.className='chip'+(x[0]===curSeries?' on':'');d.textContent=x[0];d.onclick=()=>{clickS();curSeries=x[0];document.getElementById('verQ').value='';renderChips();renderVerList();};c.appendChild(d);});
+}
+function renderVerList(){
+ const q=document.getElementById('verQ').value.trim(),L=document.getElementById('verList');L.innerHTML='';
+ let list=[];
+ if(q)allSeries().forEach(x=>x[1].forEach(v=>{if(v.indexOf(q)>=0)list.push(v);}));
+ else{const x=allSeries().find(z=>z[0]===curSeries)||allSeries()[0];list=x[1];}
+ if(!list.length){L.innerHTML='<div class="loader">Ничего не найдено. Добавь версию вручную ниже.</div>';return;}
+ list.slice(0,300).forEach(v=>{
+  const r=document.createElement('div');r.className='vrow';
+  const isSel=sel&&sel.k==='ver'&&sel.v===v,b=binds[v];
+  const l=document.createElement('div');l.innerHTML='<b>'+esc(v)+'</b>'+(b?'<small>🔗 '+esc(gName(b))+'</small>':'');
+  const bt=document.createElement('div');bt.style.cssText='display:flex;gap:6px;flex-shrink:0';
+  const bb=document.createElement('button');bb.className='btn btn-glass sm';bb.textContent=b?'🔗 Сменить':'🔗 Привязать';bb.onclick=()=>{clickS();bindVersion(v);};
+  bt.appendChild(bb);
+  if(b){const ub=document.createElement('button');ub.className='btn btn-glass sm';ub.textContent='✕';ub.onclick=()=>{clickS();delete binds[v];sv();updateVer();renderVerList();};bt.appendChild(ub);}
+  const sb=document.createElement('button');sb.className=isSel?'btn btn-play sm':'btn btn-glass sm';sb.textContent=isSel?'✓ Выбрана':'Выбрать';
+  sb.onclick=()=>{clickS();sel={k:'ver',v:v};sv();updateVer();toast('Версия '+v+(b?' → '+gName(b):''));sw('home',document.querySelector('.tab'));};
+  bt.appendChild(sb);r.append(l,bt);L.appendChild(r);
+ });
+}
+function addCustomVer(){
+ const i=document.getElementById('cvIn'),v=i.value.trim();
+ if(!/^[\w.\-]{1,20}$/.test(v)){toast('Напиши версию, например 1.21.131');return;}
+ if(customVers.indexOf(v)<0)customVers.unshift(v);
+ i.value='';curSeries='Свои';sv();renderVers();toast('Версия добавлена: '+v);
+}
+function renderGames(){
+ const L=document.getElementById('gamesList');L.innerHTML='';
+ if(!games.length){L.innerHTML='<div class="loader" style="text-align:left">Пока пусто. Нажми «Импорт» и выбери игру из телефона.</div>';return;}
+ games.forEach(g=>{
+  const isSel=sel&&sel.k==='game'&&sel.pkg===g.pkg;
+  const r=document.createElement('div');r.className='vrow';
+  const l=document.createElement('div');l.style.cssText='display:flex;align-items:center;gap:8px;min-width:0';
+  if(g.icon){const im=document.createElement('img');im.src=g.icon;im.style.cssText='width:32px;height:32px;border-radius:8px;flex-shrink:0';l.appendChild(im);}
+  const t=document.createElement('div');t.style.minWidth='0';t.innerHTML='<b>'+esc(g.name)+'</b><small>'+esc(g.pkg)+'</small>';l.appendChild(t);
+  const bt=document.createElement('div');bt.style.cssText='display:flex;gap:6px;flex-shrink:0';
+  const sb=document.createElement('button');sb.className=isSel?'btn btn-play sm':'btn btn-glass sm';sb.textContent=isSel?'✓ Выбрана':'Выбрать';
+  sb.onclick=()=>{clickS();sel={k:'game',pkg:g.pkg};sv();updateVer();toast('Выбрана игра: '+g.name);sw('home',document.querySelector('.tab'));};
+  const rb=document.createElement('button');rb.className='btn btn-glass sm';rb.textContent='✏️';
+  rb.onclick=()=>{clickS();askText('Название игры',g.name,v=>{g.name=v;sv();updateVer();renderVers();});};
+  const db=document.createElement('button');db.className='btn btn-glass sm';db.textContent='🗑';
+  db.onclick=()=>{clickS();games=games.filter(x=>x.pkg!==g.pkg);for(const k in binds)if(binds[k]===g.pkg)delete binds[k];if(sel&&sel.k==='game'&&sel.pkg===g.pkg)sel=null;sv();updateVer();renderVers();};
+  bt.append(sb,rb,db);r.append(l,bt);L.appendChild(r);
+ });
+}
+function askText(title,init,cb){
+ const m=document.createElement('div');m.className='modal';
+ const box=document.createElement('div');box.className='mbox';
+ box.innerHTML='<b style="margin-bottom:8px">'+esc(title)+'</b><input class="inp" id="atIn" maxlength="30" style="width:100%;max-width:none"><div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-play" id="atOk" style="flex:1">Сохранить</button><button class="btn btn-glass" id="atNo">Отмена</button></div>';
+ m.appendChild(box);document.querySelector('.app').appendChild(m);
+ const inp=box.querySelector('#atIn');inp.value=init||'';inp.focus();
+ box.querySelector('#atNo').onclick=()=>m.remove();
+ box.querySelector('#atOk').onclick=()=>{const v=inp.value.trim();if(v){m.remove();cb(v);}};
+}
+const iconCache=new Map();
+function pickApp(cb){
+ if(!window.AndroidBridge){toast('Выбор игры работает в установленном приложении (APK)');return;}
+ let apps=[];try{apps=JSON.parse(AndroidBridge.getApps());}catch(e){}
+ const mc=/minecraft|mojang|bedrock|pojav|mcpe|craft/i;
+ apps.sort((x,y)=>((mc.test(y.pkg+y.name)?1:0)-(mc.test(x.pkg+x.name)?1:0))||x.name.localeCompare(y.name));
+ const m=document.createElement('div');m.className='modal';
+ const box=document.createElement('div');box.className='mbox';
+ box.innerHTML='<div class="vh"><b>Выбери игру из телефона</b><button class="btn btn-glass sm" id="mcl">✕</button></div><input class="inp" id="mq" placeholder="Поиск приложения…" style="width:100%;max-width:none"><div class="mlist" id="ml"></div>';
+ m.appendChild(box);document.querySelector('.app').appendChild(m);
+ const ml=box.querySelector('#ml'),mq=box.querySelector('#mq');
+ box.querySelector('#mcl').onclick=()=>m.remove();
+ function draw(){
+  ml.innerHTML='';const q=mq.value.trim().toLowerCase();const items=[];
+  apps.forEach(a=>{
+   if(q&&(a.name+' '+a.pkg).toLowerCase().indexOf(q)<0)return;
+   const r=document.createElement('div');r.className='arow';
+   const ph=document.createElement('div');ph.className='ph';ph.textContent='🎮';
+   const t=document.createElement('div');t.innerHTML='<div class="an">'+esc(a.name)+'</div><div class="ap">'+esc(a.pkg)+'</div>';
+   r.append(ph,t);r.onclick=()=>{m.remove();cb(a);};ml.appendChild(r);items.push([a,ph]);
+  });
+  let i=0;(function step(){for(let n=0;n<8&&i<items.length;n++,i++){const [a,ph]=items[i];let ic=iconCache.get(a.pkg);if(ic===undefined){try{ic=AndroidBridge.getIcon(a.pkg);}catch(e){ic='';}iconCache.set(a.pkg,ic);}if(ic){const im=document.createElement('img');im.src=ic;ph.replaceWith(im);}}if(i<items.length)requestAnimationFrame(step);})();
+ }
+ mq.oninput=draw;draw();
+}
+function addGame(a){
+ if(!games.find(g=>g.pkg===a.pkg)){let ic='';try{ic=AndroidBridge.getIcon(a.pkg)||'';}catch(e){}games.push({pkg:a.pkg,name:a.name,icon:ic});}
+ sv();
+}
+function importGame(){
+ pickApp(a=>{addGame(a);sel={k:'game',pkg:a.pkg};sv();updateVer();toast('Игра добавлена: '+a.name);sw('vers',document.querySelectorAll('.tab')[3]);});
+}
+function bindVersion(v){
+ pickApp(a=>{addGame(a);binds[v]=a.pkg;sv();updateVer();renderVers();toast(v+' → '+a.name);});
+}
+function play(){
+ if(!sel){toast('Выбери версию или игру');sw('vers',document.querySelectorAll('.tab')[3]);return;}
+ const pkg=sel.k==='game'?sel.pkg:binds[sel.v];
+ if(!pkg){toast('К версии '+sel.v+' не привязана игра. Нажми «Привязать»');sw('vers',document.querySelectorAll('.tab')[3]);return;}
+ if(!window.AndroidBridge){toast('Запуск работает в установленном приложении (APK)');return;}
+ let ok=false;try{ok=AndroidBridge.launchApp(pkg);}catch(e){}
+ if(!ok)toast('Не удалось запустить. Игра установлена?');
+}
 
 // ---------- загрузка скинов (ad-free API: mc-heads.net, minotar.net, crafatar.com) ----------
 const skinCache=new Map();
 function loadImg(src,cors){return new Promise((res,rej)=>{let i=new Image();if(cors)i.crossOrigin='anonymous';i.onload=()=>i.naturalWidth>=64?res(i):rej(new Error('small'));i.onerror=()=>rej(new Error('load'));i.src=src;});}
 async function loadAny(src){try{let i=await loadImg(src,true);i._src=src;return i;}catch(e){let i=await loadImg(src,false);i._tainted=true;i._src=src;return i;}}
 function fetchSkin(s){
- const key=s.data?'embedded':(s.q||s.n);
+ const key=s.data?('data:'+s.n):(s.q||s.n);
  if(skinCache.has(key))return skinCache.get(key);
  let p=(async()=>{
   if(s.data)return await loadImg(s.data,false);
@@ -316,6 +477,7 @@ function makeSkinCard(s,autoRemove){
  let b2=document.createElement('button');b2.className='btn btn-glass';b2.style.cssText='width:100%;margin-top:4px;padding:5px;font-size:9px';b2.textContent='Применить';
  b2.onclick=()=>{clickS();setSkin(s);};
  d.append(cv,nm,b1,b2);
+ if(s.mine){let b3=document.createElement('button');b3.className='btn btn-glass';b3.style.cssText='width:100%;margin-top:4px;padding:5px;font-size:9px';b3.textContent='🗑 Удалить';b3.onclick=()=>{clickS();mySkins=mySkins.filter(x=>x.data!==s.data);LSset('gamer_myskins',JSON.stringify(mySkins));d.remove();};d.appendChild(b3);}
  fetchSkin(s).then(img=>drawSprite(cv,img)).catch(()=>{if(autoRemove){d.remove();}else{d.remove();toast('Скин «'+s.n+'» не найден');}});
  return d;
 }
@@ -327,12 +489,27 @@ function moreSkins(){
   l.appendChild(makeSkinCard(s,true));n++;
  }
 }
+let mySkins=jp('gamer_myskins','[]');
 function renderSkins(){
  if(skinsInit)return;skinsInit=true;
  let l=document.getElementById('skinsList');
+ mySkins.forEach(m=>l.appendChild(makeSkinCard({n:m.n,data:m.data,mine:true},false)));
  skinShown.add('steve');l.appendChild(makeSkinCard({n:'Steve',data:STEVE},true));
  moreSkins();
 }
+document.getElementById('skinFile').addEventListener('change',async e=>{
+ const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+ try{
+  const data=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f);});
+  const img=await loadImg(data,false);
+  if(img.naturalWidth!==64||(img.naturalHeight!==64&&img.naturalHeight!==32)){toast('Скин должен быть 64×64 или 64×32');return;}
+  const n=(f.name.replace(/\.[^.]+$/,'').replace(/[^\w\- ]/g,'').slice(0,20))||'Мой скин';
+  mySkins=mySkins.filter(x=>x.data!==data);mySkins.unshift({n,data});mySkins=mySkins.slice(0,20);
+  LSset('gamer_myskins',JSON.stringify(mySkins));
+  skinsInit=false;document.getElementById('skinsList').innerHTML='';skinIdx=0;skinShown.clear();
+  await setSkin({n,data,mine:true});toast('Свой скин добавлен и применён');
+ }catch(err){toast('Не удалось открыть картинку скина');}
+});
 function addSkin(){
  let v=document.getElementById('skinQ').value.trim().replace(/[^\w]/g,'');if(!v)return;
  document.getElementById('skinQ').value='';
@@ -439,7 +616,7 @@ function renderMods(mods){
   let d=document.createElement('div');d.className='card';
   let box=document.createElement('div');box.className='mimg';box.textContent='🧩';box.onclick=()=>window.open(m.link,'_blank');
   if(m.img){
-   let im=document.createElement('img');im.loading='lazy';im.referrerPolicy='no-referrer';
+   let im=document.createElement('img');im.referrerPolicy='no-referrer';
    let tried=false;
    im.onload=()=>{box.textContent='';box.appendChild(im);};
    im.onerror=()=>{if(!tried){tried=true;im.src='https://wsrv.nl/?w=320&url='+encodeURIComponent(m.img);}};
