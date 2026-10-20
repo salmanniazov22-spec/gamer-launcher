@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Gamer Launcher</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100dvh;overflow:hidden;background:#02070f;color:#fff;position:fixed;inset:0}
+.bg{position:fixed;inset:0;z-index:-4;background:radial-gradient(ellipse at 28% 18%, #1d2e68 0%, #101a3a 38%, #060a18 72%)}
+.stars{position:fixed;inset:0;z-index:-3} .star{position:absolute;background:#fff;border-radius:50%}
+.moon{position:fixed;top:10%;right:16%;width:78px;height:78px;z-index:-2;background:radial-gradient(circle at 32% 32%, #fffef5 0%, #ece8d0 42%, #c9c5ad 75%);border-radius:50%;box-shadow:0 0 28px rgba(255,250,220,.5)}
+.app{display:flex;width:100vw;height:100dvh;position:relative;z-index:1}
+.side{width:150px;background:rgba(10,16,34,.92);backdrop-filter:blur(22px);border-right:1px solid rgba(130,190,255,.13);padding:12px 8px;display:flex;flex-direction:column;flex-shrink:0}
+.logo{font-weight:950;font-size:13px;padding:2px 6px 12px} .logo b{color:#8affff}
+.tab{padding:9px 10px;border-radius:10px;cursor:pointer;color:#7e90b3;font-weight:800;display:flex;gap:8px;align-items:center;border:1px solid transparent;margin-bottom:4px;font-size:12px}
+.tab.active{color:#fff;background:rgba(138,240,255,.14);border-color:rgba(138,230,255,.26)}
+.main{flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.title-small{flex-shrink:0;text-align:center;padding-top:10px;font-size:22px;font-weight:950;letter-spacing:.5px;line-height:1}
+.title-small s{background:linear-gradient(90deg,#8affff,#8aff8a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.stage{flex:1;position:relative;margin-bottom:60px;perspective:900px;perspective-origin:50% 40%;overflow:hidden}
+.rot{position:absolute;left:50%;top:44%;width:0;height:0;transform-style:preserve-3d}
+.part{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d}
+.box{position:absolute;left:0;top:0;transform-style:preserve-3d}
+.face{position:absolute;left:50%;top:50%;backface-visibility:hidden;-webkit-backface-visibility:hidden;image-rendering:pixelated}
+.shadow{position:absolute;left:50%;bottom:30px;width:130px;height:10px;margin-left:-65px;background:radial-gradient(ellipse, rgba(0,0,0,.6) 0%, transparent 70%);border-radius:50%}
+.sname{position:absolute;left:0;right:0;bottom:3px;text-align:center;line-height:1.2}
+.sname b{display:block;font-size:12px;color:#fff}.sname span{font-size:9px;color:#8aa0c8}
+.status{position:absolute;left:0;right:0;top:50%;text-align:center;font-size:12px;color:#8affff;font-weight:800;pointer-events:none;transition:opacity .4s}
+.bottom-bar{position:absolute;left:0;right:0;bottom:0;height:60px;padding:8px 14px;background:rgba(8,14,32,.92);backdrop-filter:blur(18px);border-top:1px solid rgba(130,190,255,.18);display:flex;justify-content:space-between;align-items:center;z-index:30}
+.ver-text{font-size:10px;color:#8aa0c8;line-height:1.2} .ver-text b{color:#ff6b6b}
+.btns{display:flex;gap:8px}
+.btn{padding:10px 16px;border-radius:11px;border:none;font-weight:900;cursor:pointer;font-size:11px}
+.btn-play{background:linear-gradient(135deg,#8affff,#8aff8a);color:#001712}
+.btn-glass{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.20);color:#fff}
+.panel{display:none;flex:1;overflow:auto;padding:14px} .panel.on{display:flex;flex-direction:column}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:10px}
+.card{background:rgba(13,19,40,.85);border:1px solid rgba(130,190,255,.14);border-radius:14px;padding:10px;text-align:center}
+.sprite{width:56px;height:112px;image-rendering:pixelated;display:block;margin:0 auto 4px;filter:drop-shadow(0 6px 8px rgba(0,0,0,.7))}
+.mimg{width:100%;height:76px;border-radius:9px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden;margin-bottom:6px;cursor:pointer}
+.mimg img{width:100%;height:100%;object-fit:cover;display:block}
+.mt{font-size:10px;font-weight:800;line-height:1.25;height:25px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;cursor:pointer}
+.md{font-size:9px;color:#8aa0c8;line-height:1.25;height:34px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;margin-top:3px;text-align:left}
+.loader{grid-column:1/-1;text-align:center;font-size:11px;color:#8ab8ff;padding:10px}
+.settings-card{background:rgba(13,19,40,.9);border:1px solid rgba(130,190,255,.18);border-radius:16px;padding:16px;margin-bottom:12px}
+.set-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px}
+.inp{background:#0a1020;color:#fff;border:1px solid #334;padding:6px 8px;border-radius:8px;font-size:12px;outline:none;max-width:170px}
+.search{display:flex;gap:6px;margin-bottom:10px}
+.search input{flex:1;background:#0a1020;color:#fff;border:1px solid #334;border-radius:9px;padding:8px 10px;font-size:12px;outline:none}
+.about p{font-size:11px;line-height:1.5;color:#b8c6e6;margin-top:8px}
+@media (orientation:portrait){.app{transform:rotate(90deg);transform-origin:left top;width:100dvh;height:100vw;position:absolute;top:0;left:100vw}}
+</style>
+</head>
+<body>
+<div class="bg"></div><div class="stars" id="stars"></div><div class="moon"></div>
+<div class="app">
+<div class="side">
+<div class="logo">🎮 GAMER <b>LAUNCHER</b></div>
+<div class="tab active" onclick="clickS();sw('home',this)">🏠 Главная</div>
+<div class="tab" onclick="clickS();sw('mods',this)">🧩 Моды</div>
+<div class="tab" onclick="clickS();sw('skins',this)">👕 Скины</div>
+<div class="tab" onclick="clickS();sw('vers',this)">📦 Версии</div>
+</div>
+
+<div class="main" id="homeM">
+<div class="title-small">GAMER <s>LAUNCHER</s></div>
+<div class="stage" id="stage">
+<div class="shadow"></div>
+<div class="rot" id="rot"></div>
+<div class="status" id="status"></div>
+<div class="sname"><b id="snick"></b><span id="sskin"></span></div>
+</div>
+<div class="bottom-bar">
+<div class="ver-text" id="verText">версия еще не выбрана<br><b>—</b></div>
+<div class="btns">
+<button class="btn btn-glass" onclick="clickS();openSettings()">Настройки</button>
+<button class="btn btn-play" onclick="clickS();play()">▶ ИГРАТЬ</button>
+</div>
+</div>
+</div>
+
+<div class="panel" id="modsP"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><b style="font-size:13px">Моды — ModBay</b><button class="btn btn-glass" style="padding:5px 10px;font-size:11px" onclick="clickS();loadMods(true)">↻</button></div><div class="grid" id="modsList"></div></div>
+<div class="panel" id="skinsP">
+<div class="search"><input id="skinQ" placeholder="Ник игрока (любой скин)" autocomplete="off"><button class="btn btn-play" style="padding:8px 12px" onclick="clickS();addSkin()">Найти</button></div>
+<div class="grid" id="skinsList"></div>
+</div>
+<div class="panel" id="versP"><div class="card" style="text-align:left"><b>Выбери версию</b><div id="verGrid" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"></div></div></div>
+
+<div class="panel" id="settingsP">
+<div class="settings-card">
+<b>⚙️ Настройки</b>
+<div class="set-row"><span>Никнейм</span><input class="inp" id="nickIn" maxlength="16" placeholder="Player"></div>
+<div class="set-row"><span>Звук кликов</span><select class="inp" id="sndSel" onchange="changeSound()"></select></div>
+<div class="set-row"><span>Громкость</span><input type="range" id="volIn" min="0" max="100" value="60" style="width:120px" oninput="changeVol()"></div>
+<div class="set-row"><span>Проверить звук</span><button class="btn btn-glass" style="padding:6px 12px" onclick="clickS()">▶ Тест</button></div>
+<div class="set-row"><span>Графика</span><select class="inp" id="gfx"><option>Fancy</option><option>Fast</option></select></div>
+<div class="set-row"><span>Рендер дистанция</span><span>12 чанков</span></div>
+<div class="set-row"><span>Управление</span><span>Сенсор</span></div>
+<div style="margin-top:12px;display:flex;gap:8px"><button class="btn btn-play" onclick="clickS();saveSet()">💾 Сохранить</button><button class="btn btn-glass" onclick="clickS();sw('home',document.querySelector('.tab'))">← Назад</button></div>
+</div>
+<div class="settings-card about">
+<b>ℹ️ О приложении</b>
+<div class="set-row"><span>Название</span><span>Gamer Launcher</span></div>
+<div class="set-row"><span>Версия</span><span>6.1</span></div>
+<div class="set-row"><span>Создатель</span><span id="aboutCreator">—</span></div>
+<p>Gamer Launcher — лаунчер для Minecraft Bedrock Edition на Android в горизонтальном режиме. Выбирай версию игры, листай моды прямо с сайта ModBay, скачивай скины (они собираются и крутятся в 3D на главном экране), меняй никнейм и звук кликов в настройках. Ночная тема со звёздами и луной.</p>
+</div>
+</div>
+
+</div>
+
+<script>
+const STEVE='data:image/png;base64,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';
+const LS=(k,d)=>{try{let v=localStorage.getItem(k);return v===null?d:v;}catch(e){return d;}};
+const LSset=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}};
+function toast(t){let d=document.createElement('div');d.textContent=t;d.style.cssText='position:fixed;left:50%;bottom:76px;transform:translateX(-50%);background:rgba(10,16,34,.95);border:1px solid rgba(138,255,255,.4);padding:8px 14px;border-radius:10px;font-size:12px;z-index:99;color:#fff';document.body.appendChild(d);setTimeout(()=>d.remove(),2000);}
+
+// ---------- настройки / звуки ----------
+let nick=LS('gamer_nick','Player'),soundType=LS('gamer_snd','soft'),vol=+LS('gamer_vol','60');
+const SOUNDS={soft:'Мягкий',click:'Клик',block:'Блок',bubble:'Пузырёк',coin:'Монетка',laser:'Лазер',off:'Выключен'};
+let audioCtx=null;
+function playSound(type,v){
+ if(type==='off'||v<=0)return;
+ try{
+  if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  const c=audioCtx,t=c.currentTime;
+  const tone=(f,ty,d,g,f2,delay)=>{delay=delay||0;const o=c.createOscillator(),gn=c.createGain();o.type=ty;o.frequency.setValueAtTime(f,t+delay);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+delay+d);gn.gain.setValueAtTime(g*v,t+delay);gn.gain.exponentialRampToValueAtTime(0.0001,t+delay+d);o.connect(gn);gn.connect(c.destination);o.start(t+delay);o.stop(t+delay+d+0.02);};
+  const noise=(d,g,fc)=>{const n=(c.sampleRate*d)|0,b=c.createBuffer(1,n,c.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++)a[i]=Math.random()*2-1;const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=fc;const gn=c.createGain();gn.gain.setValueAtTime(g*v,t);gn.gain.exponentialRampToValueAtTime(0.0001,t+d);s.connect(f);f.connect(gn);gn.connect(c.destination);s.start(t);};
+  switch(type){
+   case 'soft':tone(880,'sine',.18,.3);break;
+   case 'click':tone(1800,'square',.04,.12);break;
+   case 'block':noise(.1,.9,500);tone(140,'sine',.1,.5,70);break;
+   case 'bubble':tone(500,'sine',.14,.35,1100);break;
+   case 'coin':tone(988,'square',.07,.1);tone(1319,'square',.22,.1,null,.07);break;
+   case 'laser':tone(1500,'sawtooth',.16,.1,200);break;
+  }
+ }catch(e){}
+}
+function clickS(){playSound(soundType,vol/100);}
+function initSettingsUI(){
+ let s=document.getElementById('sndSel');s.innerHTML='';
+ for(const k in SOUNDS){let o=document.createElement('option');o.value=k;o.textContent=SOUNDS[k];s.appendChild(o);}
+ s.value=soundType;document.getElementById('volIn').value=vol;
+ document.getElementById('nickIn').value=nick;document.getElementById('gfx').value=LS('gamer_gfx','Fancy');
+ refreshNick();
+}
+function changeSound(){soundType=document.getElementById('sndSel').value;LSset('gamer_snd',soundType);clickS();}
+function changeVol(){vol=+document.getElementById('volIn').value;LSset('gamer_vol',vol);}
+function refreshNick(){
+ document.getElementById('snick').textContent=nick;
+ document.getElementById('aboutCreator').textContent=nick;
+ document.getElementById('sskin').textContent='скин: '+currentSkinName;
+}
+function saveSet(){
+ let n=document.getElementById('nickIn').value.trim().slice(0,16);if(n)nick=n;
+ LSset('gamer_nick',nick);LSset('gamer_gfx',document.getElementById('gfx').value);
+ refreshNick();toast('Настройки сохранены ✓');sw('home',document.querySelector('.tab'));
+}
+function openSettings(){sw('settings');}
+
+if(screen.orientation && screen.orientation.lock){screen.orientation.lock('landscape').catch(()=>{});}
+let sb=document.getElementById('stars');
+for(let i=0;i<60;i++){let d=document.createElement('div');d.className='star';d.style.left=Math.random()*100+'%';d.style.top=Math.random()*50+'%';let z=Math.random()*1.8+0.4;d.style.width=z+'px';d.style.height=z+'px';d.style.opacity=Math.random()*0.7+0.3;sb.appendChild(d);}
+
+// ---------- версии ----------
+let selectedVer=LS('gamer_ver',null);
+let currentSkinName=LS('gamer_skin','Steve');
+const vers=['1.21.90','1.21.80','1.21.70','1.21.60','1.20.81'];
+function updateVer(){let el=document.getElementById('verText');if(selectedVer){el.innerHTML=`выбрана версия<br><b style="color:#8aff8a">${selectedVer}</b>`;}else{el.innerHTML=`версия еще не выбрана<br><b style="color:#ff6b6b">—</b>`;}}
+function renderVers(){let g=document.getElementById('verGrid');g.innerHTML='';vers.forEach(v=>{let b=document.createElement('button');b.textContent=v;b.style.cssText='padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:11px;cursor:pointer'+(selectedVer===v?';background:rgba(138,255,255,.2);border-color:#8affff':'');b.onclick=()=>{clickS();selectedVer=v;LSset('gamer_ver',v);updateVer();renderVers();sw('home',document.querySelector('.tab'));};g.appendChild(b);});}
+function play(){if(!selectedVer){toast('Выбери версию!');sw('vers');return;} alert('Запуск '+selectedVer+' / '+nick+' / '+currentSkinName);}
+
+// ---------- загрузка скинов (ad-free API: mc-heads.net, minotar.net, crafatar.com) ----------
+const skinCache=new Map();
+function loadImg(src,cors){return new Promise((res,rej)=>{let i=new Image();if(cors)i.crossOrigin='anonymous';i.onload=()=>i.naturalWidth>=64?res(i):rej(new Error('small'));i.onerror=()=>rej(new Error('load'));i.src=src;});}
+async function loadAny(src){try{let i=await loadImg(src,true);i._src=src;return i;}catch(e){let i=await loadImg(src,false);i._tainted=true;i._src=src;return i;}}
+function fetchSkin(s){
+ const key=s.data?'embedded':(s.q||s.n);
+ if(skinCache.has(key))return skinCache.get(key);
+ let p=(async()=>{
+  if(s.data)return await loadImg(s.data,false);
+  const q=encodeURIComponent(s.q||s.n);
+  for(const u of ['https://mc-heads.net/skin/'+q,'https://minotar.net/skin/'+q,'https://crafatar.com/skins/'+q]){
+   try{let i=await loadAny(u);i._slim=!!s.slim;return i;}catch(e){}
+  }
+  throw new Error('no skin');
+ })();
+ skinCache.set(key,p);p.catch(()=>skinCache.delete(key));return p;
+}
+function toDataURL(img){let c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext('2d').drawImage(img,0,0);return c.toDataURL('image/png');}
+function isSlim(img){if(img.naturalHeight<64)return false;try{let c=document.createElement('canvas');c.width=c.height=64;let x=c.getContext('2d');x.drawImage(img,0,0);return x.getImageData(47,20,1,1).data[3]===0;}catch(e){return !!img._slim;}}
+
+// ---------- 2D картинка скина для карточек ----------
+function drawSprite(canvas,img){
+ canvas.width=16;canvas.height=32;let x=canvas.getContext('2d');x.imageSmoothingEnabled=false;
+ const legacy=img.naturalHeight<64,slim=isSlim(img),aw=slim?3:4;
+ const D=(sx,sy,sw,sh,dx,dy,flip)=>{if(flip){x.save();x.translate(dx+sw,0);x.scale(-1,1);x.drawImage(img,sx,sy,sw,sh,0,dy,sw,sh);x.restore();}else x.drawImage(img,sx,sy,sw,sh,dx,dy,sw,sh);};
+ D(8,8,8,8,4,0);D(20,20,8,12,4,8);D(44,20,aw,12,4-aw,8);D(4,20,4,12,4,20);
+ if(legacy){D(44,20,aw,12,12,8,true);D(4,20,4,12,8,20,true);D(40,8,8,8,4,0);}
+ else{D(36,52,aw,12,12,8);D(20,52,4,12,8,20);D(40,8,8,8,4,0);D(20,36,8,12,4,8);D(44,36,aw,12,4-aw,8);D(52,52,aw,12,12,8);D(4,36,4,12,4,20);D(4,52,4,12,8,20);}
+}
+
+// ---------- 3D модель скина (CSS 3D) ----------
+let U=8,spinOn=false,angle=0,buildToken=0;
+function faceCanvas(img,r,flip){
+ const S=8;let c=document.createElement('canvas');c.className='face';c.width=r[2]*S;c.height=r[3]*S;
+ let x=c.getContext('2d');x.imageSmoothingEnabled=false;
+ if(flip){x.translate(c.width,0);x.scale(-1,1);}
+ x.drawImage(img,r[0],r[1],r[2],r[3],0,0,c.width,c.height);return c;
+}
+function makeBox(img,s){
+ const {w,h,d,u,v,mirror,inf=0}=s;
+ const W=w+inf*2,H=h+inf*2,D=d+inf*2;
+ let box=document.createElement('div');box.className='box';
+ box.style.cssText=`width:${W*U}px;height:${H*U}px;margin-left:${-W*U/2}px;margin-top:${-H*U/2}px`;
+ let R={top:[u+d,v,w,d],bottom:[u+d+w,v,w,d],right:[u,v+d,d,h],front:[u+d,v+d,w,h],left:[u+d+w,v+d,d,h],back:[u+2*d+w,v+d,w,h]};
+ if(mirror){let t=R.right;R.right=R.left;R.left=t;}
+ const T={
+  front:[W,H,`translateZ(${D*U/2}px)`],
+  back:[W,H,`rotateY(180deg) translateZ(${D*U/2}px)`],
+  right:[D,H,`rotateY(-90deg) translateZ(${W*U/2}px)`],
+  left:[D,H,`rotateY(90deg) translateZ(${W*U/2}px)`],
+  top:[W,D,`rotateX(90deg) translateZ(${H*U/2}px)`],
+  bottom:[W,D,`rotateX(-90deg) translateZ(${H*U/2}px)`]
+ };
+ for(const k in T){
+  let c=faceCanvas(img,R[k],mirror);
+  c.style.width=T[k][0]*U+'px';c.style.height=T[k][1]*U+'px';
+  c.style.marginLeft=-T[k][0]*U/2+'px';c.style.marginTop=-T[k][1]*U/2+'px';
+  c.style.transform=T[k][2];box.appendChild(c);
+ }
+ return box;
+}
+async function showSkin(img,name){
+ const token=++buildToken;spinOn=false;
+ const stage=document.getElementById('stage'),rot=document.getElementById('rot'),st=document.getElementById('status');
+ U=Math.max(4,Math.floor((stage.clientHeight-46)/33));
+ currentSkinName=name;refreshNick();
+ rot.innerHTML='';angle=0;rot.style.transform='rotateX(-6deg) rotateY(0deg)';
+ st.style.opacity=1;st.textContent='Сборка скина…';
+ const legacy=img.naturalHeight<64,slim=isSlim(img),aw=slim?3:4;
+ const parts=[
+  {b:{w:4,h:12,d:4,u:0,v:16},o:{w:4,h:12,d:4,u:0,v:32},x:-2,y:10,from:[-4,16,6]},
+  {b:legacy?{w:4,h:12,d:4,u:0,v:16,mirror:true}:{w:4,h:12,d:4,u:16,v:48},o:{w:4,h:12,d:4,u:0,v:48},x:2,y:10,from:[4,16,-6]},
+  {b:{w:8,h:12,d:4,u:16,v:16},o:{w:8,h:12,d:4,u:16,v:32},x:0,y:-2,from:[0,6,16]},
+  {b:{w:aw,h:12,d:4,u:40,v:16},o:{w:aw,h:12,d:4,u:40,v:32},x:-(4+aw/2),y:-2,from:[-16,-4,4]},
+  {b:legacy?{w:aw,h:12,d:4,u:40,v:16,mirror:true}:{w:aw,h:12,d:4,u:32,v:48},o:{w:aw,h:12,d:4,u:48,v:48},x:4+aw/2,y:-2,from:[16,-4,-4]},
+  {b:{w:8,h:8,d:8,u:0,v:0},o:{w:8,h:8,d:8,u:32,v:0},x:0,y:-12,from:[0,-18,0]}
+ ];
+ let els=parts.map((p,i)=>{
+  let el=document.createElement('div');el.className='part';
+  el.appendChild(makeBox(img,p.b));
+  if(!(legacy&&i!==5))el.appendChild(makeBox(img,Object.assign({inf:i===5?1:0.5},p.o)));
+  const rx=(Math.random()*160-80)|0,ry=(Math.random()*160-80)|0;
+  el.style.transform=`translate3d(${(p.x+p.from[0])*U}px,${(p.y+p.from[1])*U}px,${p.from[2]*U}px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  el.style.opacity=0;
+  rot.appendChild(el);return el;
+ });
+ void rot.offsetWidth;
+ els.forEach((el,i)=>{
+  const p=parts[i];
+  el.style.transition=`transform .9s cubic-bezier(.2,.9,.3,1.1) ${i*.12}s, opacity .4s ease ${i*.12}s`;
+  el.style.transform=`translate3d(${p.x*U}px,${p.y*U}px,0px)`;el.style.opacity=1;
+ });
+ await new Promise(r=>setTimeout(r,900+parts.length*120+150));
+ if(token!==buildToken)return;
+ st.style.opacity=0;spinOn=true; // собран — теперь крутится на месте
+}
+let lastT=0;
+function tick(t){
+ let dt=Math.min(0.05,(t-lastT)/1000||0);lastT=t;
+ if(spinOn&&document.getElementById('homeM').style.display!=='none'){
+  angle=(angle+dt*50)%360;
+  document.getElementById('rot').style.transform=`rotateX(-6deg) rotateY(${angle}deg)`;
+ }
+ requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+// ---------- применение скина ----------
+async function applySkin(s){
+ let img;try{img=await fetchSkin(s);}catch(e){toast('Скин «'+s.n+'» не загрузился (нет интернета?)');return false;}
+ LSset('gamer_skin',s.n);LSset('gamer_skin_sel',JSON.stringify({n:s.n,q:s.q||null,slim:!!s.slim,steve:!!s.data}));
+ try{LSset('gamer_skin_data',toDataURL(img));}catch(e){try{localStorage.removeItem('gamer_skin_data');}catch(_){}}
+ return img;
+}
+async function setSkin(s){
+ let img=await applySkin(s);if(!img)return;
+ sw('home',document.querySelector('.tab'));showSkin(img,s.n);toast('Скин применён: '+s.n);
+}
+async function downloadSkin(s){
+ let img=await applySkin(s);if(!img)return;
+ if(window.AndroidBridge){
+  try{if(img._tainted)AndroidBridge.downloadUrl(img._src,s.n+'.png');else AndroidBridge.saveSkin(s.n+'.png',toDataURL(img).split(',')[1]);}catch(e){}
+  sw('home',document.querySelector('.tab'));showSkin(img,s.n);return;
+ }
+ try{
+  if(img._tainted)throw 0;
+  let c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext('2d').drawImage(img,0,0);
+  c.toBlob(b=>{let u=URL.createObjectURL(b);let a=document.createElement('a');a.href=u;a.download=s.n+'.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000);},'image/png');
+ }catch(e){try{let a=document.createElement('a');a.href=img._src;a.download=s.n+'.png';a.target='_blank';document.body.appendChild(a);a.click();a.remove();}catch(_){}}
+ sw('home',document.querySelector('.tab')); // сразу на главную: скин собирается и крутится
+ showSkin(img,s.n);toast('Скин скачан и применён');
+}
+
+// ---------- список скинов: бесконечная прокрутка ----------
+const SKIN_POOL=['MHF_Alex','Notch','jeb_','Dinnerbone','MHF_Herobrine','MHF_Creeper','MHF_Enderman','MHF_Zombie','MHF_Skeleton','MHF_Villager','MHF_Golem','MHF_Blaze','MHF_Pig','MHF_Cow','MHF_Chicken','MHF_Spider','Dream','Technoblade','GeorgeNotFound','Sapnap','Skeppy','BadBoyHalo','TommyInnit','Tubbo_','Ranboo','Wilbur_Soot','Philza','Quackity','karljacobs','Fundy','Punz','Purpled','CaptainSparklez','DanTDM','stampylonghead','PopularMMOs','xisumavoid','Grian','Etho','Pearlescent_Moon','docm77','Bdoubleo100','GeminiTay','iskall85','Hypixel','Mumbo','Zombiecleo','Smallishbeans','Joehills','FalseSymmetry','ZombieCleo','Vikkstar123','KSIOlajidebt','Preston','UnspeakableGaming','SSundee','Aphmau','LDShadowLady','Jschlatt','Ph1LzA','Slimecicle','HBomb94','LazarCodeLazar','Sneegsnag'];
+let skinIdx=0,skinsInit=false;
+const skinShown=new Set();
+function makeSkinCard(s,autoRemove){
+ let d=document.createElement('div');d.className='card';
+ let cv=document.createElement('canvas');cv.className='sprite';cv.width=16;cv.height=32;
+ let nm=document.createElement('div');nm.style.cssText='font-size:10px;margin:2px 0 6px';nm.textContent=s.n;
+ let b1=document.createElement('button');b1.className='btn btn-play';b1.style.cssText='width:100%;padding:6px;font-size:10px';b1.textContent='⬇ Скачать';
+ b1.onclick=()=>{clickS();downloadSkin(s);};
+ let b2=document.createElement('button');b2.className='btn btn-glass';b2.style.cssText='width:100%;margin-top:4px;padding:5px;font-size:9px';b2.textContent='Применить';
+ b2.onclick=()=>{clickS();setSkin(s);};
+ d.append(cv,nm,b1,b2);
+ fetchSkin(s).then(img=>drawSprite(cv,img)).catch(()=>{if(autoRemove){d.remove();}else{d.remove();toast('Скин «'+s.n+'» не найден');}});
+ return d;
+}
+function moreSkins(){
+ let l=document.getElementById('skinsList'),n=0;
+ while(n<12&&skinIdx<SKIN_POOL.length){
+  let q=SKIN_POOL[skinIdx++];if(skinShown.has(q.toLowerCase()))continue;skinShown.add(q.toLowerCase());
+  let s={n:q.replace(/^MHF_/,''),q:q,slim:q==='MHF_Alex'};
+  l.appendChild(makeSkinCard(s,true));n++;
+ }
+}
+function renderSkins(){
+ if(skinsInit)return;skinsInit=true;
+ let l=document.getElementById('skinsList');
+ skinShown.add('steve');l.appendChild(makeSkinCard({n:'Steve',data:STEVE},true));
+ moreSkins();
+}
+function addSkin(){
+ let v=document.getElementById('skinQ').value.trim().replace(/[^\w]/g,'');if(!v)return;
+ document.getElementById('skinQ').value='';
+ let l=document.getElementById('skinsList');
+ l.insertBefore(makeSkinCard({n:v},false),l.firstChild);
+ document.getElementById('skinsP').scrollTop=0;
+}
+function bindInfinite(panel,fn){panel.addEventListener('scroll',()=>{if(panel.scrollTop+panel.clientHeight>=panel.scrollHeight-260)fn();},{passive:true});}
+bindInfinite(document.getElementById('skinsP'),moreSkins);
+
+// ---------- моды с ModBay (реальные данные сайта, подгрузка при прокрутке) ----------
+const MB='https://modbay.org';
+const proxies=[
+ {n:'прямо',f:u=>u},
+ {n:'allorigins',f:u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u)},
+ {n:'corsproxy',f:u=>'https://corsproxy.io/?url='+encodeURIComponent(u)},
+ {n:'codetabs',f:u=>'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u)},
+ {n:'thingproxy',f:u=>'https://thingproxy.freeboard.io/fetch/'+u},
+ {n:'jina',f:u=>'https://r.jina.ai/'+u}
+];
+async function getText(url){
+ const tasks=proxies.map(p=>(async()=>{
+  try{
+   const work=(async()=>{
+    const r=await fetch(p.f(url));
+    if(!r.ok)throw new Error(r.status);
+    return await r.text();
+   })();
+   const t=await Promise.race([work,new Promise((_,rej)=>setTimeout(()=>rej(new Error('таймаут')),15000))]);
+   if(t.length<1500||!/modbay/i.test(t))throw new Error('пустой ответ');
+   return t;
+  }catch(e){throw new Error(p.n+': '+(e&&e.message?e.message:'ошибка'));}
+ })());
+ try{return await Promise.any(tasks);}
+ catch(e){throw new Error((e.errors||[e]).map(x=>x.message).join(' | '));}
+}
+const absU=u=>{try{return new URL(u,MB).href;}catch(e){return null;}};
+const MOD_RE=/^https:\/\/modbay\.org\/mods\/(\d+)-[^\/#?]+\.html$/;
+function imgOf(im){
+ for(const a of ['data-src','data-lazy-src','data-original','src']){
+  let v=im.getAttribute(a);if(v&&!v.startsWith('data:'))return absU(v.trim());
+ }
+ return null;
+}
+function parseMods(text){
+ const map=new Map();
+ const get=(id,link)=>{let e=map.get(id);if(!e){e={id,link,title:'',img:null,desc:'',h:false};map.set(id,e);}return e;};
+ if(/<html|<!doctype/i.test(text.slice(0,2000))){
+  const d=new DOMParser().parseFromString(text,'text/html');
+  d.querySelectorAll('a[href]').forEach(a=>{
+   const href=absU(a.getAttribute('href'));if(!href)return;
+   const m=href.match(MOD_RE);if(!m)return;
+   const e=get(m[1],href);
+   const h=a.closest('h1,h2,h3,h4');
+   if(h&&!e.h){
+    e.h=true;e.title=h.textContent.trim().replace(/\s+/g,' ');
+    let s=h.nextElementSibling;
+    if(s&&!s.querySelector('img')){let t=s.textContent.trim().replace(/\s+/g,' ');if(t.length>12)e.desc=t.slice(0,160);}
+    if(!e.desc){let p=h.parentElement&&h.parentElement.querySelector('p');if(p)e.desc=p.textContent.trim().replace(/\s+/g,' ').slice(0,160);}
+   }
+   const im=a.querySelector('img');
+   if(im&&!e.img){e.img=imgOf(im);if(!e.title)e.title=(im.getAttribute('alt')||'').replace(/^Thumbnail:\s*/i,'');}
+  });
+ }else{ // markdown (запасной вариант через jina)
+  const lines=text.split('\n');
+  const thumb=/\[!\[[^\]]*\]\((https?:[^)\s]+)\)\]\((https:\/\/modbay\.org\/mods\/(\d+)-[^)\s#]+\.html)\)/g;
+  let m;while((m=thumb.exec(text))){get(m[3],m[2]).img=m[1];}
+  lines.forEach((ln,i)=>{
+   const h=ln.match(/^#{1,4}\s*\[(.+)\]\((https:\/\/modbay\.org\/mods\/(\d+)-[^)\s#]+\.html)\)\s*$/);
+   if(h){const e=get(h[3],h[2]);e.h=true;e.title=h[1];
+    for(let j=i+1;j<Math.min(i+5,lines.length);j++){const t=lines[j].trim();if(t&&!t.startsWith('[')&&!t.startsWith('!')&&!t.startsWith('#')){e.desc=t.slice(0,160);break;}}}
+  });
+ }
+ return [...map.values()].filter(e=>(e.h||e.img)&&e.title);
+}
+let modsPage=0,modsLoading=false,modsDone=false;const modIds=new Set();
+function modsLoader(txt,retry){
+ let l=document.getElementById('modsList');let old=document.getElementById('modsLoader');if(old)old.remove();
+ if(!txt)return;
+ let d=document.createElement('div');d.className='loader';d.id='modsLoader';d.textContent=txt;
+ if(retry){let b=document.createElement('button');b.className='btn btn-play';b.style.cssText='display:block;margin:8px auto 0;padding:7px 14px';b.textContent='Повторить';b.onclick=()=>{clickS();moreMods();};d.appendChild(b);}
+ l.appendChild(d);
+}
+function loadMods(force){
+ if(force){modsPage=0;modsDone=false;modIds.clear();document.getElementById('modsList').innerHTML='';}
+ if(modsPage===0)moreMods();
+}
+async function moreMods(){
+ if(modsLoading||modsDone)return;modsLoading=true;
+ const page=modsPage+1,url=page===1?MB+'/mods/':MB+'/mods/page/'+page+'/';
+ modsLoader(page===1?'Загрузка модов с ModBay…':'Загружаю ещё…');
+ try{
+  const mods=parseMods(await getText(url)).filter(m=>!modIds.has(m.id));
+  if(!mods.length){modsDone=true;modsLoader(page===1?'На странице не нашлось модов. Возможно, сайт изменился.':'Это все моды',page===1);}
+  else{mods.forEach(m=>modIds.add(m.id));modsPage=page;renderMods(mods);modsLoader('');}
+ }catch(e){modsLoader('Не удалось загрузить: '+(e.message||'').slice(0,160),true);}
+ finally{modsLoading=false;}
+ let p=document.getElementById('modsP');
+ if(!modsDone&&modsPage>0&&p.classList.contains('on')&&p.scrollHeight<=p.clientHeight+40)setTimeout(moreMods,150);
+}
+function renderMods(mods){
+ let list=document.getElementById('modsList');
+ mods.forEach(m=>{
+  let d=document.createElement('div');d.className='card';
+  let box=document.createElement('div');box.className='mimg';box.textContent='🧩';box.onclick=()=>window.open(m.link,'_blank');
+  if(m.img){
+   let im=document.createElement('img');im.loading='lazy';im.referrerPolicy='no-referrer';
+   let tried=false;
+   im.onload=()=>{box.textContent='';box.appendChild(im);};
+   im.onerror=()=>{if(!tried){tried=true;im.src='https://wsrv.nl/?w=320&url='+encodeURIComponent(m.img);}};
+   im.src=m.img;
+  }
+  let t=document.createElement('div');t.className='mt';t.textContent=m.title;t.onclick=()=>window.open(m.link,'_blank');
+  let ds=document.createElement('div');ds.className='md';ds.textContent=m.desc||'';
+  let b=document.createElement('button');b.className='btn btn-play';b.style.cssText='width:100%;margin-top:6px;padding:6px;font-size:10px';b.textContent='⬇ Скачать';
+  b.onclick=()=>{clickS();window.open(MB+'/download/mirror/'+m.id+'-0','_blank');};
+  d.append(box,t,ds,b);
+  let ld=document.getElementById('modsLoader');ld?list.insertBefore(d,ld):list.appendChild(d);
+ });
+}
+bindInfinite(document.getElementById('modsP'),moreMods);
+
+// ---------- навигация ----------
+function sw(name,el){
+ if(el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');}
+ document.getElementById('homeM').style.display=name==='home'?'flex':'none';
+ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+ if(name!=='home')document.getElementById(name+'P').classList.add('on');
+ if(name==='skins')renderSkins();if(name==='mods')loadMods();if(name==='vers')renderVers();
+}
+
+// ---------- старт ----------
+updateVer();initSettingsUI();
+(async()=>{
+ await new Promise(r=>setTimeout(r,150));
+ let img=null,name='Steve';
+ try{
+  const sel=JSON.parse(LS('gamer_skin_sel','null'));
+  if(sel&&!sel.steve){
+   name=sel.n;
+   const sd=LS('gamer_skin_data',null);
+   if(sd){try{img=await loadImg(sd,false);}catch(e){}}
+   if(!img){try{img=await fetchSkin(sel);}catch(e){}}
+  }
+ }catch(e){}
+ if(!img){name='Steve';img=await loadImg(STEVE,false);}
+ showSkin(img,name);
+})();
+</script>
+</body>
+</html>
